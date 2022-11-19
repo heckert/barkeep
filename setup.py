@@ -9,6 +9,7 @@ setup(
     author='Heinz Eckert',
     author_email='heinzeckert6@gmail.com',
     packages=find_namespace_packages(),
+    include_package_data=True,
     install_requires=[
         'matplotlib',
         'pandas'
