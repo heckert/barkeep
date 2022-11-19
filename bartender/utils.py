@@ -40,6 +40,7 @@ def get_longest_item(array: list) -> str:
 
 def _compose(*funcs):
     # TODO: Implement compose function
+    # https://youtube.com/shorts/HIdGoFHHKuw?feature=share
     pass
 
 def get_cmap_colors(length: int, 
