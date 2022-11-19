@@ -14,4 +14,4 @@ environment:
 	@$(CONDA_ACTIVATE) $(PROJECT_NAME); conda develop .
 
 test:
-	@$(CONDA_ACTIVATE) $(PROJECT_NAME); pytest
+	@$(CONDA_ACTIVATE) $(PROJECT_NAME); coverage run -m pytest; coverage report -m

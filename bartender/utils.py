@@ -1,3 +1,4 @@
+import matplotlib
 import matplotlib.pyplot as plt
 
 from typing import Tuple, Optional
@@ -30,22 +31,17 @@ def normalize_rgb(rgb: Tuple[int, int, int],
 
 def get_longest_item(array: list) -> str:
     candidate = str(array[0])
-    
+
     for i in array:
         if len(str(i)) > len(candidate):
             candidate = str(i)
-        
+
     return candidate
 
 
-def _compose(*funcs):
-    # TODO: Implement compose function
-    # https://youtube.com/shorts/HIdGoFHHKuw?feature=share
-    pass
-
-def get_cmap_colors(length: int, 
-                    normalize_to: Optional[int] = None,
-                    select_cats: Optional[list] = None,
+def get_cmap_colors(length: int, *,
+                    n_colors_in_cmap: Optional[int] = None,
+                    indices_to_select: Optional[list] = None,
                     name='tab10') -> list:
     """Get an array of colors for coloring bar segments.
 
@@ -53,32 +49,36 @@ def get_cmap_colors(length: int,
     for available colormaps.
 
     Pass only length parameter to utilize the full cmap.
-    When choosing a discrete (i.e. not continuous) map and you want to select 
+    When choosing a discrete (i.e. not continuous) map and you want to select
     colors instead of using of the whole range, pass the total number of colors
     in the cmap as normalize_to, and pass a list of which indices to select via
     select_cats.
 
     Args:
         length (int): Number of colors to return.
-        normalize_to (int, optional): Number of colors in the map. Defaults to None.
+        normalize_to (int, optional): Number of colors in the map.
         select_cats (list, optional): Indices of colors to select.
         name (str, optional): Name of matplotlib colormap. Defaults to 'tab10'.
 
     Returns:
         list: An array of length `length`
     """
-    
-    cmap = plt.cm.get_cmap(name)
-    indices = range(length)
-    
-    if select_cats:
-            indices = select_cats
-    
-    if normalize_to:
-        norm = plt.Normalize(vmin=0, vmax=normalize_to - 1)
-    else:
+
+    if indices_to_select is None:
+        indices_to_select = range(length)
+
+    if n_colors_in_cmap is None:
         norm = plt.Normalize(vmin=0, vmax=length - 1)
-    
-    result = [cmap(norm(i)) for i in indices]
+    else:
+        norm = plt.Normalize(vmin=0, vmax=n_colors_in_cmap - 1)
+
+    cmap = matplotlib.colormaps[name]
+
+    result = list(
+        map(lambda x: cmap(norm(x)), indices_to_select)
+    )
+
+    # Round each tuple item in result list to 4 decimal places.
+    result = [tuple(map(lambda x: round(x, 4), tup)) for tup in result]
 
     return result
