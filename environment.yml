@@ -1,0 +1,10 @@
+name: bartender
+channels:
+  - conda-forge
+  - conda
+dependencies:
+  - matplotlib
+  - pandas
+  - numpy
+  - flake8
+  - pytest
