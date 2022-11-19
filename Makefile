@@ -10,9 +10,7 @@ CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda activ
 environment:
 # create conda env from environemt.yml file
 	@echo "Creating conda environment for $(PROJECT_NAME)..."
-	@conda env create -n $(PROJECT_NAME) -f environment.yaml
-
-develop:
+	@conda env create -n $(PROJECT_NAME) -f environment.yml
 	@$(CONDA_ACTIVATE) $(PROJECT_NAME); conda develop .
 
 test:

@@ -1,0 +1,16 @@
+font:
+  name: Abadi Extra Light
+  size:
+    l: 26
+    m: 20
+    s: 16
+
+figsize:
+  regular:
+    x: 12
+    y: 6
+  wide:
+    x: 15
+    y: 6
+
+  

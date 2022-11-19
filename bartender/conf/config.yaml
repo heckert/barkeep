@@ -1,0 +1,17 @@
+defaults:
+  - _self_
+  - style: default
+
+textsize:
+  title: ${style.font.size.l}
+  axe: ${stye.font.size.m}
+  annotation: ${style.font.size.m}
+  legend: ${style.font.size.s}
+
+figsize:
+  regular:
+    x: ${style.figsize.regular.x}
+    y: ${style.figsize.regular.y}
+  wide: 
+    x: ${style.figsize.wide.x}
+    y: ${style.figsize.wide.y}

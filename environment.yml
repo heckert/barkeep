@@ -1,10 +1,12 @@
-name: bartender
 channels:
   - conda-forge
   - conda
 dependencies:
+  - python=3.10
   - matplotlib
   - pandas
+  - omegaconf
   - numpy
   - flake8
   - pytest
+  
