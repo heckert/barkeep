@@ -2,15 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from bartender.aggregate import Aggregator
-from bartender.grid import GridConfig
-
-
-def adjust_gridconf(gridconf: GridConfig,
-                    aggregator: Aggregator) -> GridConfig:
-    # TODO
-    # Figure out best way to adjust gridconf based on aggregator
-
-    pass
+from bartender.grid import GridConfig, GridConfigFactory
 
 
 class GridPlot:
@@ -20,14 +12,8 @@ class GridPlot:
                  include_overall=True):
 
         self.aggregator = aggregator
-
-        self.fig, self.axes = self._setup_grid(gridconf)
-
-    @staticmethod
-    def _setup_grid(gridconf: GridConfig):
-        fig, axes = plt.subplots(**gridconf.get_dict())
-
-        return fig, axes
+        # Set up grid based on gridconf
+        self.fig, self.axes = plt.subplots(**gridconf.asdict())
 
     def show(self):
 
@@ -57,7 +43,9 @@ def main():
         average='metric'
     )
 
-    gridconf = GridConfig()
+    factory = GridConfigFactory()
+    # TODO: Fit Factory to aggregator
+    gridconf = factory.get_grid_config()
 
     gp = GridPlot(agg, gridconf)
 
