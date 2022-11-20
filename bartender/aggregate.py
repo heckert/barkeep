@@ -7,7 +7,7 @@ class Aggregator:
                  groupby: str,
                  count: str,
                  average: str = None,
-                 index_ascending: bool = True):
+                 index_ascending: bool = False):
 
         self.df = df
         self.grouper = df.groupby(groupby)

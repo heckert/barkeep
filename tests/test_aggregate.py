@@ -35,10 +35,10 @@ def test_group_percents(agg):
                                   categories=['small', 'medium', 'large'])
 
     expected = pd.DataFrame([
-        (2 / 3, 0.0, 1 / 3),
+        (0.0, 2 / 3, 1 / 3),
         (1 / 3, 1 / 3, 1 / 3),
-        (0.0, 2 / 3, 1 / 3)
-    ], index=list('abc'), columns=columns)
+        (2 / 3, 0.0, 1 / 3),
+    ], index=list('cba'), columns=columns)
 
     expected.index.name = 'group'
     expected.columns.name = 'bins'
