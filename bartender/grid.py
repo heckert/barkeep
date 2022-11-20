@@ -4,6 +4,8 @@ from dataclasses import dataclass, field, asdict
 from omegaconf import DictConfig
 from typing import List, Tuple, Dict
 
+from bartender.aggregate import Aggregator
+
 
 hydra.initialize(config_path="conf", version_base=None)
 cfg = hydra.compose(config_name="config")
@@ -14,7 +16,7 @@ class GridConfig:
     figsize: Tuple[int, int]
     nrows: int
     ncols: int
-    gridspec_kw: Dict[str, int]
+    gridspec_kw: Dict[str, List[int]]
 
     def asdict(self) -> dict:
         return asdict(self)
@@ -27,6 +29,11 @@ class GridConfigFactory:
     ncols: int = 1
     height_ratios: List[int] = field(default_factory=lambda: [1])
     width_ratios: List[int] = field(default_factory=lambda: [5])
+
+    def fit_aggregator(self, aggregator: Aggregator) -> None:
+        """Depending on the aggregator's attributes, the grid is adjusted."""
+        # TODO
+        pass
 
     @property
     def gridspec_kw(self) -> dict:
