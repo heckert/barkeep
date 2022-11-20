@@ -8,6 +8,7 @@ from bartender.grid import GridConfig
 def adjust_gridconf(gridconf: GridConfig,
                     aggregator: Aggregator) -> GridConfig:
     # TODO
+    # Figure out best way to adjust gridconf based on aggregator
 
     pass
 
