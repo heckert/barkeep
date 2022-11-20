@@ -10,4 +10,5 @@ dependencies:
   - flake8
   - pytest
   - coverage
+  - ipykernel  # for running jupyter in vscode
   

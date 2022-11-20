@@ -28,7 +28,7 @@ def agg(df):
     )
 
 
-def test_value_counts(agg):
+def test_group_percents(agg):
 
     columns = pd.CategoricalIndex(['small', 'medium', 'large'],
                                   ordered=True,
@@ -43,4 +43,4 @@ def test_value_counts(agg):
     expected.index.name = 'group'
     expected.columns.name = 'bins'
 
-    assert agg.value_counts.equals(expected)
+    assert agg.group_percents.equals(expected)

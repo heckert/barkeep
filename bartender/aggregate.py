@@ -16,8 +16,26 @@ class Aggregator:
         self.index_ascending = index_ascending
 
     @property
-    def value_counts(self) -> pd.DataFrame:
+    def overall_percents(self) -> pd.DataFrame:
+        result = pd.DataFrame(
+            self.df[self.count].value_counts(normalize=True)
+        ).transpose()
 
+        result.index = ['Overall']
+
+        return result
+
+    @property
+    def overall_mean(self) -> pd.DataFrame:
+        if self.average is None:
+            return
+
+        return pd.DataFrame({
+            'Mean': self.df[self.average].mean()
+        })
+
+    @property
+    def group_percents(self) -> pd.DataFrame:
         return self.grouper[self.count] \
             .value_counts(normalize=True) \
             .unstack() \
@@ -25,8 +43,11 @@ class Aggregator:
             .sort_index(ascending=self.index_ascending)
 
     @property
-    def means(self) -> pd.DataFrame:
+    def n_groups(self) -> int:
+        return len(self.group_percents)
 
+    @property
+    def group_means(self) -> pd.DataFrame:
         if self.average is None:
             return
 

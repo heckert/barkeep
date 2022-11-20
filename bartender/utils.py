@@ -39,7 +39,7 @@ def get_longest_item(array: list) -> str:
     return candidate
 
 
-def get_cmap_colors(length: int, *,
+def get_cmap_colors(length: Optional[int] = None,
                     n_colors_in_cmap: Optional[int] = None,
                     indices_to_select: Optional[list] = None,
                     name='tab10') -> list:
@@ -51,13 +51,13 @@ def get_cmap_colors(length: int, *,
     Pass only length parameter to utilize the full cmap.
     When choosing a discrete (i.e. not continuous) map and you want to select
     colors instead of using of the whole range, pass the total number of colors
-    in the cmap as normalize_to, and pass a list of which indices to select via
-    select_cats.
+    in the cmap as ``n_colors_in_cmap``, and pass a list of which indices to
+    select via ``select_cats``.
 
     Args:
         length (int): Number of colors to return.
-        normalize_to (int, optional): Number of colors in the map.
-        select_cats (list, optional): Indices of colors to select.
+        n_colors_in_cmap (int, optional): Number of colors in the map.
+        indices_to_select (list, optional): Indices of colors to select.
         name (str, optional): Name of matplotlib colormap. Defaults to 'tab10'.
 
     Returns:
@@ -66,6 +66,8 @@ def get_cmap_colors(length: int, *,
 
     if indices_to_select is None:
         indices_to_select = range(length)
+    else:
+        length = max(indices_to_select) + 1
 
     if n_colors_in_cmap is None:
         norm = plt.Normalize(vmin=0, vmax=length - 1)
