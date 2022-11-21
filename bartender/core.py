@@ -13,7 +13,7 @@ class GridPlot:
 
         self.aggregator = aggregator
         # Set up grid based on gridconf
-        self.fig, self.axes = plt.subplots(**gridconf.asdict())
+        self.fig, self.axes = plt.subplots(**gridconf)
 
     def show(self):
 
