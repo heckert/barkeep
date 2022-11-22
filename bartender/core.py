@@ -45,7 +45,7 @@ def main():
 
     factory = GridConfigFactory()
     # TODO: Fit Factory to aggregator
-    gridconf = factory.get_grid_config()
+    gridconf = factory.build()
 
     gp = GridPlot(agg, gridconf)
 

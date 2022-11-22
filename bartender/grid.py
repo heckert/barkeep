@@ -35,8 +35,6 @@ class GridConfig(Mapping):
 @dataclass
 class GridConfigFactory:
     figconfig: DictConfig = cfg.figsize
-    nrows: int = 1
-    ncols: int = 1
     height_ratios: List[int] = field(default_factory=lambda: [1])
     width_ratios: List[int] = field(default_factory=lambda: [5])
 
@@ -46,17 +44,25 @@ class GridConfigFactory:
         pass
 
     @property
+    def figsize(self) -> tuple:
+        return tuple(self.figconfig.regular.values())
+
+    @property
+    def nrows(self) -> int:
+        return len(self.height_ratios)
+
+    @property
+    def ncols(self) -> int:
+        return len(self.width_ratios)
+
+    @property
     def gridspec_kw(self) -> dict:
         return dict(
             height_ratios=self.height_ratios,
             width_ratios=self.width_ratios
         )
 
-    @property
-    def figsize(self) -> tuple:
-        return tuple(self.figconfig.regular.values())
-
-    def get_grid_config(self) -> GridConfig:
+    def build(self) -> GridConfig:
         return GridConfig(
             figsize=self.figsize,
             nrows=self.nrows,
