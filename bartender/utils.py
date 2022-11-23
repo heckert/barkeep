@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 from collections.abc import Mapping
 from typing import Tuple, Optional
 
-from bartender.aggregate import Aggregator
-
 
 def normalize_rgb(rgb: Tuple[int, int, int],
                   alpha: float = None) -> Tuple[float]:
@@ -101,3 +99,4 @@ class _MappableDataClass(Mapping):
 
     def __len__(self):
         return len(self.__dict__)
+        

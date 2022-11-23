@@ -66,7 +66,6 @@ class Aggregator:
     def n_groups(self) -> int:
         return len(self.group_percents)
 
-
     def get_grid_recipe(self) -> GridRecipe:
         # TODO
         pass
