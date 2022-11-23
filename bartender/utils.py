@@ -1,7 +1,10 @@
 import matplotlib
 import matplotlib.pyplot as plt
 
+from collections.abc import Mapping
 from typing import Tuple, Optional
+
+from bartender.aggregate import Aggregator
 
 
 def normalize_rgb(rgb: Tuple[int, int, int],
@@ -84,3 +87,17 @@ def get_cmap_colors(length: Optional[int] = None,
     result = [tuple(map(lambda x: round(x, 4), tup)) for tup in result]
 
     return result
+
+
+class _MappableDataClass(Mapping):
+    """Base class for allowing to unpack dataclasses via ** like dicts."""
+
+    # https://stackoverflow.com/questions/8601268/class-that-acts-as-mapping-for-unpacking
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __getitem__(self, x):
+        return self.__dict__[x]
+
+    def __len__(self):
+        return len(self.__dict__)

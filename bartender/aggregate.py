@@ -1,5 +1,15 @@
 import pandas as pd
 
+from dataclasses import dataclass
+
+
+@dataclass
+class GridRecipe:
+    has_overall: bool
+    has_mean: bool
+    legend_out: bool
+    n_groups: int
+
 
 class Aggregator:
     def __init__(self,
@@ -7,6 +17,7 @@ class Aggregator:
                  groupby: str,
                  count: str,
                  average: str = None,
+                 overall: bool = True,
                  index_ascending: bool = False):
 
         self.df = df
@@ -16,7 +27,7 @@ class Aggregator:
         self.index_ascending = index_ascending
 
     @property
-    def overall_percents(self) -> pd.DataFrame:
+    def overall_percent(self) -> pd.DataFrame:
         result = pd.DataFrame(
             self.df[self.count].value_counts(normalize=True)
         ).transpose()
@@ -43,10 +54,6 @@ class Aggregator:
             .sort_index(ascending=self.index_ascending)
 
     @property
-    def n_groups(self) -> int:
-        return len(self.group_percents)
-
-    @property
     def group_means(self) -> pd.DataFrame:
         if self.average is None:
             return
@@ -54,3 +61,12 @@ class Aggregator:
         return self.grouper[self.average] \
             .mean() \
             .sort_index(ascending=self.index_ascending)
+
+    @property
+    def n_groups(self) -> int:
+        return len(self.group_percents)
+
+
+    def get_grid_recipe(self) -> GridRecipe:
+        # TODO
+        pass

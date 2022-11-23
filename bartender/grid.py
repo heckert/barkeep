@@ -1,11 +1,11 @@
 import hydra
 
-from collections.abc import Mapping
 from dataclasses import dataclass, field
 from omegaconf import DictConfig
 from typing import List, Tuple, Dict
 
 from bartender.aggregate import Aggregator
+from bartender.utils import _MappableDataClass
 
 
 hydra.initialize(config_path="conf", version_base=None)
@@ -13,23 +13,11 @@ cfg = hydra.compose(config_name="config")
 
 
 @dataclass
-class GridConfig(Mapping):
+class GridConfig(_MappableDataClass):
     figsize: Tuple[int, int]
     nrows: int
     ncols: int
     gridspec_kw: Dict[str, List[int]]
-
-    # These dunder methods allow to
-    # unpack the dataclass like a dict
-    # https://stackoverflow.com/questions/8601268/class-that-acts-as-mapping-for-unpacking
-    def __iter__(self):
-        return iter(self.__dict__)
-
-    def __getitem__(self, x):
-        return self.__dict__[x]
-
-    def __len__(self):
-        return len(self.__dict__)
 
 
 @dataclass
