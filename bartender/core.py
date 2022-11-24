@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from bartender import test_df
 from bartender.aggregate import Aggregator
-from bartender.grid import GridConfig, GridConfigFactory
+from bartender.grid import (GridConfig,
+                            GridConfigFactory,
+                            get_grid_recipe)
 
 
 class GridPlot:
@@ -26,25 +29,15 @@ class GridPlot:
 
 def main():
 
-    df = pd.DataFrame({
-        'group': list('aabbccabc'),
-        'metric': range(1, 10),
-        'bins': pd.Categorical(['small', 'small', 'small',
-                                'medium', 'medium', 'medium',
-                                'large', 'large', 'large'],
-                               ordered=True,
-                               categories=['small', 'medium', 'large'])
-    })
-
     agg = Aggregator(
-        df,
+        test_df,
         groupby='group',
         count='bins',
-        average='metric'
+        # average='metric'
     )
 
-    factory = GridConfigFactory()
-    # TODO: Fit Factory to aggregator
+    recipe = get_grid_recipe(agg, has_overall=False, legend_out=False)
+    factory = GridConfigFactory(recipe)
     gridconf = factory.build()
 
     gp = GridPlot(agg, gridconf)
