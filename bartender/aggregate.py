@@ -20,7 +20,7 @@ class Aggregator:
     @property
     def overall_percent(self) -> pd.DataFrame:
         if not self.overall:
-            return None
+            return
 
         result = pd.DataFrame(
             self.df[self.count].value_counts(normalize=True)
@@ -33,14 +33,14 @@ class Aggregator:
     @property
     def overall_mean(self) -> pd.DataFrame:
         if not self.overall:
-            return None
+            return
 
         if self.average is None:
             return
 
         return pd.DataFrame({
-            'Mean': self.df[self.average].mean()
-        })
+            'Mean': [self.df[self.average].mean()]
+        }, index=['Overall'])
 
     @property
     def group_percents(self) -> pd.DataFrame:

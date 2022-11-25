@@ -21,16 +21,12 @@ class GridRecipe(_MappableDataClass):
 
 
 def get_grid_recipe(aggregator: Aggregator,
-                    has_overall: bool = True,
                     legend_out: bool = False) -> GridRecipe:
 
-    n_groups = aggregator.n_groups
-    has_mean = aggregator.group_means is not None
-
     return GridRecipe(
-        n_groups=n_groups,
-        has_mean=has_mean,
-        has_overall=has_overall,
+        n_groups=aggregator.n_groups,
+        has_mean=aggregator.group_means is not None,
+        has_overall=aggregator.overall,
         legend_out=legend_out
     )
 

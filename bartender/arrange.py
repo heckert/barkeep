@@ -9,7 +9,6 @@ def get_arrangement(aggregator: Aggregator,
 
     """Arrange aggragator's data to match grid prduced by plt.subplots."""
 
-    # array = np.zeros([nrows, ncols])
     datasets = [
         aggregator.overall_percent, aggregator.overall_mean,
         aggregator.group_percents, aggregator.group_means
@@ -17,12 +16,9 @@ def get_arrangement(aggregator: Aggregator,
 
     datasets = [dataset for dataset in datasets if dataset is not None]
 
-    array = np.array(datasets)
-    if sum([nrows, ncols]) > 2:
-        array = array.reshape((nrows, ncols))
-
-    print(array)
-    print(array.shape)
+    print(datasets)
+    # TODO
+    # CONTINUE HERE
 
 
 def main():
@@ -33,11 +29,11 @@ def main():
         test_df,
         groupby='group',
         count='bins',
-        # average='metric',
-        overall=False
+        average='metric',
+        overall=True
     )
 
-    recipe = get_grid_recipe(agg, has_overall=False, legend_out=False)
+    recipe = get_grid_recipe(agg, legend_out=False)
     factory = GridConfigFactory(recipe)
     gridconf = factory.build()
 
