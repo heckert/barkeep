@@ -14,17 +14,10 @@ def get_arrangement(aggregator: Aggregator,
         aggregator.group_pct, aggregator.group_avg
     ]
 
+    # Remove Nones
     datasets = [dataset for dataset in datasets if dataset is not None]
 
-    result = []
-    for _ in range(nrows):
-        row = []
-        for _ in range(ncols):
-            # index = i + j
-            row.append(datasets.pop(0))
-        result.append(row)
-
-    return result
+    return datasets
 
 
 def main():

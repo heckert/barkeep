@@ -1,5 +1,7 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from typing import List
 
@@ -20,30 +22,59 @@ class GridPlot:
         self.nrows = gridconf.nrows
         self.ncols = gridconf.ncols
 
-        # Set up grid based on gridconf
+        # Set up grid based on gridconf.
         self.fig, axes = plt.subplots(**gridconf)
 
-        self.data2ax_map = self._parse_axes(axes)
+        # Extract AxesSubplots from np.ndarray
+        # and map them to Aggregator attributes.
+        self.axes_map = self._parse_axes(axes, self.nrows, self.ncols)
 
-    def _parse_axes(self, axes) -> List[tuple]:
+    @staticmethod
+    def _parse_axes(axes, nrows, ncols) -> None:
+        """Map keys to AxesSubplots returned by `plt.subplots`"""
 
-        result = []
+        axes_map = {
+            'overall_pct': None,
+            'overall_avg': None,
+            'group_pct': None,
+            'group_avg': None
+        }
 
         if not isinstance(axes, np.ndarray):
-            result.append((self.aggregator.group_pct, axes))
+            axes_map['group_pct'] = axes
 
         else:
-            # TODO
-            pass
+            if sum([nrows, ncols]) < 4:
+                if nrows > 1:
+                    axes = axes.reshape((2, 1))
 
-        return result
+                if ncols > 1:
+                    axes = axes.reshape((1, 2))
+
+            group_axes = axes[-1, ]
+
+            if len(group_axes) > 1:
+                axes_map['group_pct'] = group_axes[0]
+                axes_map['group_avg'] = group_axes[1]
+            else:
+                axes_map['group_pct'] = group_axes[0]
+
+            if nrows > 1:
+                overall_axes = axes[0, ]
+
+                if len(overall_axes) > 1:
+                    axes_map['overall_pct'] = overall_axes[0, ]
+                    axes_map['overall_avg'] = overall_axes[1, ]
+                else:
+                    axes_map['overall_pct'] = overall_axes[0]
+
+        return axes_map
 
     def show(self):
-        for data, ax in self.data2ax_map:
-            data.plot(kind='barh', stacked=True, ax=ax)
-
-        # for dataset, ax in zip(self.arrangement, self.axes):
-        #     dataset.plot(kind='barh', stacked=True, ax=ax)
+        for key, ax in self.axes_map.items():
+            if ax is not None:
+                data = self.aggregator.__getattribute__(key)
+                data.plot(kind='barh', stacked=True, ax=ax)
 
         plt.show()
 
@@ -54,8 +85,8 @@ def main():
         test_df,
         groupby='group',
         count='bins',
-        # average='metric',
-        overall=False
+        average='metric',
+        overall=True
     )
 
     recipe = get_grid_recipe(agg, legend_out=False)
@@ -63,7 +94,6 @@ def main():
     gridconf = factory.build()
 
     gp = GridPlot(agg, gridconf)
-
     gp.show()
 
 
