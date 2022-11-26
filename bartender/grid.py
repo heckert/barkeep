@@ -14,6 +14,7 @@ cfg = hydra.compose(config_name="config")
 
 @dataclass
 class GridRecipe(_MappableDataClass):
+    """Semantic description of grid structure"""
     n_groups: int
     has_mean: bool
     has_overall: bool
@@ -22,6 +23,16 @@ class GridRecipe(_MappableDataClass):
 
 def get_grid_recipe(aggregator: Aggregator,
                     legend_out: bool = False) -> GridRecipe:
+    """Translates shape of Aggregator into a GridRecipe.
+
+    Args:
+        aggregator (Aggregator): Aggregator instance.
+        legend_out (bool, optional): Put legend outside of plot.
+            Defaults to False.
+
+    Returns:
+        GridRecipe: A semantic description of the strucure of the plot.
+    """
 
     return GridRecipe(
         n_groups=aggregator.n_groups,
@@ -33,6 +44,10 @@ def get_grid_recipe(aggregator: Aggregator,
 
 @dataclass
 class GridConfig(_MappableDataClass):
+    """Contains all numeric specifications for the grid.
+
+    The class attributes serve as kwargs for `plt.subplots`.
+    """
     figsize: Tuple[int, int]
     nrows: int
     ncols: int
@@ -40,6 +55,7 @@ class GridConfig(_MappableDataClass):
 
 
 class GridConfigFactory:
+    """Translates the semantic GridRecipe into the numeric GridConfig."""
 
     def __init__(self, recipe: GridRecipe):
 
