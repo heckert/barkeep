@@ -28,7 +28,7 @@ def get_grid_recipe(aggregator: Aggregator,
     Args:
         aggregator (Aggregator): Aggregator instance.
         legend_out (bool, optional): Put legend outside of plot.
-            Defaults to False.
+                                     Defaults to False.
 
     Returns:
         GridRecipe: A semantic description of the strucure of the plot.
@@ -36,7 +36,7 @@ def get_grid_recipe(aggregator: Aggregator,
 
     return GridRecipe(
         n_groups=aggregator.n_groups,
-        has_mean=aggregator.group_means is not None,
+        has_mean=aggregator.group_avg is not None,
         has_overall=aggregator.overall,
         legend_out=legend_out
     )
@@ -46,7 +46,7 @@ def get_grid_recipe(aggregator: Aggregator,
 class GridConfig(_MappableDataClass):
     """Contains all numeric specifications for the grid.
 
-    The class attributes serve as kwargs for `plt.subplots`.
+    The attributes serve as kwargs for `plt.subplots`.
     """
     figsize: Tuple[int, int]
     nrows: int
@@ -55,7 +55,7 @@ class GridConfig(_MappableDataClass):
 
 
 class GridConfigFactory:
-    """Translates the semantic GridRecipe into the numeric GridConfig."""
+    """Translates semantic GridRecipe into numeric GridConfig."""
 
     def __init__(self, recipe: GridRecipe):
 

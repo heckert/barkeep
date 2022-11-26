@@ -10,15 +10,21 @@ def get_arrangement(aggregator: Aggregator,
     """Arrange aggragator's data to match grid prduced by plt.subplots."""
 
     datasets = [
-        aggregator.overall_percent, aggregator.overall_mean,
-        aggregator.group_percents, aggregator.group_means
+        aggregator.overall_pct, aggregator.overall_avg,
+        aggregator.group_pct, aggregator.group_avg
     ]
 
     datasets = [dataset for dataset in datasets if dataset is not None]
 
-    print(datasets)
-    # TODO
-    # CONTINUE HERE
+    result = []
+    for _ in range(nrows):
+        row = []
+        for _ in range(ncols):
+            # index = i + j
+            row.append(datasets.pop(0))
+        result.append(row)
+
+    return result
 
 
 def main():
