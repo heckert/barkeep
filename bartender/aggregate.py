@@ -2,11 +2,19 @@ import pandas as pd
 
 
 class Aggregator:
+    """Provides all aggregates for the plot"""
+
+    _allowed_avg_types = {
+        'mean',
+        'median'
+    }
+
     def __init__(self,
                  df: pd.DataFrame, *,
                  groupby: str,
                  count: str,
                  average: str = None,
+                 average_type: str = 'mean',
                  overall: bool = True,
                  index_ascending: bool = False):
 
@@ -14,11 +22,19 @@ class Aggregator:
         self.grouper = df.groupby(groupby)
         self.count = count
         self.average = average
+
+        if average_type not in self._allowed_avg_types:
+            raise ValueError(
+                'average_type must be either '
+                f'({", ".join(self._allowed_avg_types)})'
+            )
+
+        self.average_type = average_type
         self.overall = overall
         self.index_ascending = index_ascending
 
     @property
-    def overall_percent(self) -> pd.DataFrame:
+    def overall_pct(self) -> pd.DataFrame:
         if not self.overall:
             return
 
@@ -31,19 +47,22 @@ class Aggregator:
         return result
 
     @property
-    def overall_mean(self) -> pd.DataFrame:
+    def overall_avg(self) -> pd.DataFrame:
         if not self.overall:
             return
 
         if self.average is None:
             return
 
+        avg_method = self.df[self.average] \
+            .__getattr__(self.average_type)
+
         return pd.DataFrame({
-            'Mean': [self.df[self.average].mean()]
+            self.average_type: [avg_method()]
         }, index=['Overall'])
 
     @property
-    def group_percents(self) -> pd.DataFrame:
+    def group_pct(self) -> pd.DataFrame:
         return self.grouper[self.count] \
             .value_counts(normalize=True) \
             .unstack() \
@@ -51,14 +70,18 @@ class Aggregator:
             .sort_index(ascending=self.index_ascending)
 
     @property
-    def group_means(self) -> pd.DataFrame:
+    def group_avg(self) -> pd.DataFrame:
         if self.average is None:
             return
 
-        return self.grouper[self.average] \
-            .mean() \
-            .sort_index(ascending=self.index_ascending)
+        return self.grouper.agg(**{
+            self.average_type: (self.average, self.average_type)
+        }).sort_index(ascending=self.index_ascending)
 
     @property
     def n_groups(self) -> int:
-        return len(self.group_percents)
+        return len(self.group_pct)
+
+    @property
+    def n_count_categories(self) -> int:
+        return len(self.group_pct.columns)

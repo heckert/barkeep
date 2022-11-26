@@ -28,7 +28,7 @@ def agg(df):
     )
 
 
-def test_group_percents(agg):
+def test_group_pct(agg):
 
     columns = pd.CategoricalIndex(['small', 'medium', 'large'],
                                   ordered=True,
@@ -43,4 +43,61 @@ def test_group_percents(agg):
     expected.index.name = 'group'
     expected.columns.name = 'bins'
 
-    assert agg.group_percents.equals(expected)
+    assert agg.group_pct.equals(expected)
+
+
+def test_group_mean(agg):
+
+    expected = pd.DataFrame({
+        'mean': [6 + 2/3, 5, 3 + 1/3]
+    })
+
+    expected.index = list('cba')
+    expected.index.name = 'group'
+
+    assert agg.group_avg.equals(expected)
+
+
+def test_group_median(agg):
+
+    expected = pd.DataFrame({
+        'median': [6., 4., 2.]
+    })
+
+    expected.index = list('cba')
+    expected.index.name = 'group'
+
+    agg.average_type = 'median'
+
+    assert agg.group_avg.equals(expected)
+
+
+def test_overall_pct(agg):
+
+    expected = pd.DataFrame([
+        [1 / 3, 1 / 3, 1 / 3]
+    ], columns=['small', 'medium', 'large'], index=['Overall'])
+
+    assert agg.overall_pct.equals(expected)
+
+
+def test_n_groups(agg):
+
+    assert agg.n_groups == 3
+
+
+def test_n_count_categories(agg):
+
+    assert agg.n_count_categories == 3
+
+
+def test_wrong_avg(df):
+
+    with pytest.raises(ValueError):
+        Aggregator(
+            df,
+            groupby='group',
+            count='bins',
+            average='metric',
+            average_type='foo'
+        )

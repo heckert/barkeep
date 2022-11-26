@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import pandas as pd
 
 from bartender import test_df
 from bartender.aggregate import Aggregator

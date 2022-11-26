@@ -1,6 +1,6 @@
 import hydra
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from omegaconf import DictConfig
 from typing import List, Tuple, Dict
 
