@@ -1,46 +1,46 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from typing import List
+
 from bartender import test_df
 from bartender.aggregate import Aggregator
-from bartender.arrange import get_arrangement
 from bartender.grid import (GridConfig,
                             GridConfigFactory,
                             get_grid_recipe)
 
 
 class GridPlot:
+
     def __init__(self,
-                 arrangement: list,
+                 aggregator: Aggregator,
                  gridconf: GridConfig):
 
-        self.arrangement = arrangement
-        # Set up grid based on gridconf
-        self.fig, self.axes = plt.subplots(**gridconf)
+        self.aggregator = aggregator
         self.nrows = gridconf.nrows
         self.ncols = gridconf.ncols
 
-    def show(self):
-        if isinstance(self.axes, np.ndarray):
-            print('Axes is array')
-            print(self.axes.shape)
+        # Set up grid based on gridconf
+        self.fig, axes = plt.subplots(**gridconf)
 
-            print(self.axes)
-            for i in range(self.nrows):
-                for j in range(self.ncols):
+        self.data2ax_map = self._parse_axes(axes)
 
-                    self.arrangement[i][j].plot(kind='barh',
-                                                stacked=True,
-                                                ax=self.axes[i, j])
+    def _parse_axes(self, axes) -> List[tuple]:
+
+        result = []
+
+        if not isinstance(axes, np.ndarray):
+            result.append((self.aggregator.group_pct, axes))
+
         else:
-            print('Axes is no array')
-            # TODO: fix for None dimensions
-            self.arrangement[0][0].plot(kind='barh',
-                                        stacked=True,
-                                        ax=self.axes)
+            # TODO
+            pass
 
-        print(self.axes)
-        print(self.arrangement)
+        return result
+
+    def show(self):
+        for data, ax in self.data2ax_map:
+            data.plot(kind='barh', stacked=True, ax=ax)
 
         # for dataset, ax in zip(self.arrangement, self.axes):
         #     dataset.plot(kind='barh', stacked=True, ax=ax)
@@ -54,17 +54,15 @@ def main():
         test_df,
         groupby='group',
         count='bins',
-        average='metric',
-        overall=True
+        # average='metric',
+        overall=False
     )
 
     recipe = get_grid_recipe(agg, legend_out=False)
     factory = GridConfigFactory(recipe)
     gridconf = factory.build()
 
-    arranged_data = get_arrangement(agg, gridconf.nrows, gridconf.ncols)
-
-    gp = GridPlot(arranged_data, gridconf)
+    gp = GridPlot(agg, gridconf)
 
     gp.show()
 
