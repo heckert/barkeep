@@ -1,6 +1,5 @@
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
 
 from collections.abc import Mapping
 from typing import Tuple, Optional
@@ -100,7 +99,3 @@ class _MappableDataClass(Mapping):
 
     def __len__(self):
         return len(self.__dict__)
-
-
-def is_np_ndarray(object) -> bool:
-    return isinstance(object, np.ndarray)
