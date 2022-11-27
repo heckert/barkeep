@@ -18,8 +18,10 @@ class GridPlot:
         self.aggregator = aggregator
 
         axparser = AxParser(gridconf, legend_out)
+        axparser.parse()
+
         self.fig = axparser.fig
-        self.axmap = axparser.get_axmap()
+        self.axmap = axparser.axmap
 
     def show(self):
         for key, ax in self.axmap.items():
@@ -37,7 +39,7 @@ def main(legend_out=False):
         groupby='group',
         count='bins',
         average='metric',
-        # average_type='median',
+        average_type='median',
         overall=True
     )
 

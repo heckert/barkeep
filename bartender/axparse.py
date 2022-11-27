@@ -24,11 +24,12 @@ class AxParser:
         self.fig, self.axs = plt.subplots(**gridconf)
         self.nrows = gridconf.nrows
         self.ncols = gridconf.ncols
+        self.legend_out = legend_out
 
-        if legend_out:
-            self._pop_legend_ax()
-        else:
-            self.legend_ax = None
+        self._axs_is_nparray = isinstance(self.axs, np.ndarray)
+
+    def _reshape_axs(self):
+        self.axs = self.axs.reshape(self.nrows, self.ncols)
 
     def _pop_legend_ax(self) -> matplotlib.axes.Axes:
         gs = self.axs[0, -1].get_gridspec()
@@ -45,7 +46,7 @@ class AxParser:
         # if there were one colun less.
         self.ncols -= 1
 
-    def get_axmap(self) -> AxMap:
+    def _get_axmap(self) -> AxMap:
         """Parse AxesSubplots from return object of `plt.subplots`.
 
         Depending on number of rows and columns, plt.subplots returns
@@ -54,14 +55,6 @@ class AxParser:
         to keys, refering to the corresponding `Aggregator` attributes.
         For details see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html
-
-        Arguments:
-            axs: Second output elemeent of `plt.subplots`.
-            nrows (int): Number of rows in desired plot.
-            ncols (int): Number of columns in desired plot.
-
-        Returns:
-            dict: A dictionary mapping string keys to the AxesSubplots.
         """
 
         axmap = {}
@@ -70,24 +63,32 @@ class AxParser:
             axmap['group_pct'] = self.axs
 
         else:
-            # Make sure axs array is 2-dimensional.
-            axs = self.axs.reshape(self.nrows, self.ncols)
-
-            group_axs = axs[-1, ]
+            group_axs = self.axs[-1, ]
 
             if len(group_axs) > 1:
-                axmap['group_pct'] = group_axs[0]
+                # axmap['group_pct'] = group_axs[0]
                 axmap['group_avg'] = group_axs[1]
-            else:
-                axmap['group_pct'] = group_axs[0]
+
+            axmap['group_pct'] = group_axs[0]
 
             if self.nrows > 1:
-                overall_axs = axs[0, ]
+                overall_axs = self.axs[0, ]
 
                 if len(overall_axs) > 1:
-                    axmap['overall_pct'] = overall_axs[0, ]
-                    axmap['overall_avg'] = overall_axs[1, ]
-                else:
-                    axmap['overall_pct'] = overall_axs[0]
+                    # axmap['overall_pct'] = overall_axs[0]
+                    axmap['overall_avg'] = overall_axs[1]
+
+                axmap['overall_pct'] = overall_axs[0]
 
         return AxMap(**axmap)
+
+    def parse(self):
+        if self._axs_is_nparray:
+            self._reshape_axs()
+
+        if self.legend_out:
+            self._pop_legend_ax()
+        else:
+            self.legend_ax = None
+
+        self.axmap = self._get_axmap()
