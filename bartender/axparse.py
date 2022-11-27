@@ -47,13 +47,13 @@ class AxParser:
         self.ncols -= 1
 
     def _get_axmap(self) -> AxMap:
-        """Parse AxesSubplots from return object of `plt.subplots`.
+        """Parse AxesSubplots from return-object of `plt.subplots`.
 
         Depending on number of rows and columns, plt.subplots returns
         either a single AxesSubplot or a numpy ndarray containing multiple
         subplot objects. This function parses the return object and maps it
-        to keys, refering to the corresponding `Aggregator` attributes.
-        For details see
+        to keys referencing to the corresponding `Aggregator` attributes.
+        For details on plt.subplots see
         https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html
         """
 
@@ -65,20 +65,18 @@ class AxParser:
         else:
             group_axs = self.axs[-1, ]
 
-            if len(group_axs) > 1:
-                # axmap['group_pct'] = group_axs[0]
-                axmap['group_avg'] = group_axs[1]
-
             axmap['group_pct'] = group_axs[0]
 
-            if self.nrows > 1:
-                overall_axs = self.axs[0, ]
+            if len(group_axs) > 1:
+                axmap['group_avg'] = group_axs[1]
 
-                if len(overall_axs) > 1:
-                    # axmap['overall_pct'] = overall_axs[0]
-                    axmap['overall_avg'] = overall_axs[1]
+            if self.nrows > 1:
+                overall_axs = self.axs[0]
 
                 axmap['overall_pct'] = overall_axs[0]
+
+                if len(overall_axs) > 1:
+                    axmap['overall_avg'] = overall_axs[1]
 
         return AxMap(**axmap)
 
