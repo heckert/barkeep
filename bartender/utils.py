@@ -87,7 +87,7 @@ def get_cmap_colors(length: Optional[int] = None,
     return result
 
 
-class _MappableDataClass(Mapping):
+class MappableDataClass(Mapping):
     """Base class for allowing to unpack dataclasses via ** like dicts."""
 
     # https://stackoverflow.com/questions/8601268/class-that-acts-as-mapping-for-unpacking

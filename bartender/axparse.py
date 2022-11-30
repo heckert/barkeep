@@ -5,11 +5,12 @@ import numpy as np
 from dataclasses import dataclass
 
 from bartender.grid import GridConfig
-from bartender.utils import _MappableDataClass
+from bartender.utils import MappableDataClass
 
 
 @dataclass
-class AxMap(_MappableDataClass):
+class AxMap(MappableDataClass):
+    """Contains matplotlib axes with keys referencing Aggregator datasets."""
     overall_pct: matplotlib.axes.Axes = None
     overall_avg: matplotlib.axes.Axes = None
     group_pct: matplotlib.axes.Axes = None
@@ -17,9 +18,20 @@ class AxMap(_MappableDataClass):
 
 
 class AxParser:
+
     def __init__(self,
                  gridconf: GridConfig,
                  legend_out: bool):
+
+        """Generates the AxesSubplot objects and parses them into an Axmap.
+
+        Due to the varying dimensionality of the subplot structure,
+        this is one of the more tricky parts of the program.
+
+        Args:
+            gridconf (GridConfig): Contains kwargs expected by `plt.subplots`.
+            legend_out (bool): Whether legend should be put outside the plot.
+        """
 
         self.fig, self.axs = plt.subplots(**gridconf)
         self.nrows = gridconf.nrows
@@ -46,7 +58,7 @@ class AxParser:
         # if there were one colun less.
         self.ncols -= 1
 
-    def _get_axmap(self) -> AxMap:
+    def _extract_axmap(self) -> AxMap:
         """Parse AxesSubplots from return-object of `plt.subplots`.
 
         Depending on number of rows and columns, plt.subplots returns
@@ -80,7 +92,7 @@ class AxParser:
 
         return AxMap(**axmap)
 
-    def parse(self):
+    def get_axmap(self) -> AxMap:
         if self._axs_is_nparray:
             self._reshape_axs()
 
@@ -89,4 +101,7 @@ class AxParser:
         else:
             self.legend_ax = None
 
-        self.axmap = self._get_axmap()
+        return self._extract_axmap()
+
+    def get_figure(self) -> matplotlib.figure.Figure:
+        return self.fig

@@ -5,7 +5,7 @@ from omegaconf import DictConfig
 from typing import List, Tuple, Dict
 
 from bartender.aggregate import Aggregator
-from bartender.utils import _MappableDataClass
+from bartender.utils import MappableDataClass
 
 
 hydra.initialize(config_path="conf", version_base=None)
@@ -13,7 +13,7 @@ cfg = hydra.compose(config_name="config")
 
 
 @dataclass
-class GridRecipe(_MappableDataClass):
+class GridRecipe(MappableDataClass):
     """Semantic description of grid structure"""
     n_groups: int
     has_mean: bool
@@ -43,7 +43,7 @@ def get_grid_recipe(aggregator: Aggregator,
 
 
 @dataclass
-class GridConfig(_MappableDataClass):
+class GridConfig(MappableDataClass):
     """Contains all numeric specifications for the grid.
 
     The attributes serve as kwargs for `plt.subplots`.

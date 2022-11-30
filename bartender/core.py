@@ -18,10 +18,9 @@ class GridPlot:
         self.aggregator = aggregator
 
         axparser = AxParser(gridconf, legend_out)
-        axparser.parse()
 
-        self.fig = axparser.fig
-        self.axmap = axparser.axmap
+        self.axmap = axparser.get_axmap()
+        self.fig = axparser.get_figure()
 
     def show(self):
         for key, ax in self.axmap.items():
