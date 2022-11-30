@@ -20,23 +20,24 @@ class AxMap(MappableDataClass):
 class AxParser:
 
     def __init__(self,
-                 gridconf: GridConfig,
-                 legend_out: bool):
+                 gridconf: GridConfig):
 
         """Generates the AxesSubplot objects and parses them into an Axmap.
 
         Due to the varying dimensionality of the subplot structure,
-        this is one of the more tricky parts of the program.
+        this is one of the trickier parts of the application.
 
         Args:
             gridconf (GridConfig): Contains kwargs expected by `plt.subplots`.
             legend_out (bool): Whether legend should be put outside the plot.
         """
 
-        self.fig, self.axs = plt.subplots(**gridconf)
-        self.nrows = gridconf.nrows
-        self.ncols = gridconf.ncols
-        self.legend_out = legend_out
+        self.legend_out = gridconf.legend_out
+        subplots_specs = gridconf.subplots_specs
+
+        self.nrows = subplots_specs.nrows
+        self.ncols = subplots_specs.ncols
+        self.fig, self.axs = plt.subplots(**subplots_specs)
 
         self._axs_is_nparray = isinstance(self.axs, np.ndarray)
 

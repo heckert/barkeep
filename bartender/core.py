@@ -12,12 +12,11 @@ class GridPlot:
 
     def __init__(self,
                  aggregator: Aggregator,
-                 gridconf: GridConfig,
-                 legend_out=True):
+                 gridconf: GridConfig):
 
         self.aggregator = aggregator
 
-        axparser = AxParser(gridconf, legend_out)
+        axparser = AxParser(gridconf)
 
         self.axmap = axparser.get_axmap()
         self.fig = axparser.get_figure()
@@ -43,10 +42,10 @@ def main(legend_out=False):
     )
 
     recipe = get_grid_recipe(agg, legend_out=legend_out)
-    factory = GridConfigFactory(recipe)
-    gridconf = factory.build()
+    factory = GridConfigFactory()
+    gridconf = factory.build(recipe)
 
-    gp = GridPlot(agg, gridconf, legend_out)
+    gp = GridPlot(agg, gridconf)
     gp.show()
 
 

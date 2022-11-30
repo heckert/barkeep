@@ -14,7 +14,7 @@ cfg = hydra.compose(config_name="config")
 
 @dataclass
 class GridRecipe(MappableDataClass):
-    """Semantic description of grid structure"""
+    """Semantic description of grid structure."""
     n_groups: int
     has_mean: bool
     has_overall: bool
@@ -31,7 +31,7 @@ def get_grid_recipe(aggregator: Aggregator,
                                      Defaults to False.
 
     Returns:
-        GridRecipe: A semantic description of the strucure of the plot.
+        GridRecipe: A semantic description of the plot's strucure.
     """
 
     return GridRecipe(
@@ -43,7 +43,7 @@ def get_grid_recipe(aggregator: Aggregator,
 
 
 @dataclass
-class GridConfig(MappableDataClass):
+class SubplotsSpecs(MappableDataClass):
     """Contains all numeric specifications for the grid.
 
     The attributes serve as kwargs for `plt.subplots`.
@@ -54,26 +54,34 @@ class GridConfig(MappableDataClass):
     gridspec_kw: Dict[str, List[int]]
 
 
+@dataclass
+class GridConfig(MappableDataClass):
+    """Wrapper for subplots specs & legend out parameter.
+
+    Gridplot expects this object as argument.
+    """
+
+    subplots_specs: SubplotsSpecs
+    legend_out: bool
+
+
 class GridConfigFactory:
-    """Translates semantic GridRecipe into numeric GridConfig."""
+    """Translates semantic GridRecipe into GridConfig."""
 
-    def __init__(self, recipe: GridRecipe):
+    def __init__(self):
 
-        self.recipe = recipe
         self.figconfig: DictConfig = cfg.figsize
         self.height_ratios = [1]
         self.width_ratios = [5]
 
-        self._parse_recipe()
+    def _parse_recipe(self, recipe: GridRecipe):
+        if recipe.has_overall:
+            self.height_ratios += [recipe.n_groups]
 
-    def _parse_recipe(self):
-        if self.recipe.has_overall:
-            self.height_ratios += [self.recipe.n_groups]
-
-        if self.recipe.has_mean:
+        if recipe.has_mean:
             self.width_ratios += [1]
 
-        if self.recipe.legend_out:
+        if recipe.legend_out:
             self.width_ratios += [1]
 
         # If both has mean and legend out,
@@ -83,7 +91,13 @@ class GridConfigFactory:
 
     @property
     def figsize(self) -> tuple:
-        return tuple(self.figconfig.regular.values())
+        # When legend out & avg ax, widen figure.
+        if len(self.width_ratios) == 3:
+            figsize = tuple(self.figconfig.wide.values())
+        else:
+            figsize = tuple(self.figconfig.regular.values())
+
+        return figsize
 
     @property
     def nrows(self) -> int:
@@ -100,10 +114,19 @@ class GridConfigFactory:
             width_ratios=self.width_ratios
         )
 
-    def build(self) -> GridConfig:
-        return GridConfig(
+    @property
+    def subplots_specs(self) -> SubplotsSpecs:
+        return SubplotsSpecs(
             figsize=self.figsize,
             nrows=self.nrows,
             ncols=self.ncols,
             gridspec_kw=self.gridspec_kw
+        )
+
+    def build(self, recipe: GridRecipe) -> GridConfig:
+        self._parse_recipe(recipe)
+
+        return GridConfig(
+            subplots_specs=self.subplots_specs,
+            legend_out=recipe.legend_out
         )
