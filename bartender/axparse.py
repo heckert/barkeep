@@ -48,8 +48,9 @@ class AxParser:
         gs = self.axs[0, -1].get_gridspec()
 
         self.legend_ax = self.fig.add_subplot(gs[0:, -1])
+        self.legend_ax.axis("off")
 
-        # Remove legend ax
+        # Remove legend ax.
         for ax in self.axs[:, -1]:
             ax.remove()
         self.axs = self.axs[:, :-1]

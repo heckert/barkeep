@@ -30,7 +30,7 @@ class GridPlot:
         plt.show()
 
 
-def main(legend_out=False):
+def main(legend_out=True):
 
     agg = Aggregator(
         test_df,
