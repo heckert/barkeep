@@ -29,7 +29,6 @@ class AxParser:
 
         Args:
             gridconf (GridConfig): Contains kwargs expected by `plt.subplots`.
-            legend_out (bool): Whether legend should be put outside the plot.
         """
 
         self.legend_out = gridconf.legend_out
@@ -39,10 +38,8 @@ class AxParser:
         self.ncols = subplots_specs.ncols
         self.fig, self.axs = plt.subplots(**subplots_specs)
 
-        self._axs_is_nparray = isinstance(self.axs, np.ndarray)
-
-    def _reshape_axs(self):
-        self.axs = self.axs.reshape(self.nrows, self.ncols)
+        if isinstance(self.axs, np.ndarray):
+            self.axs = self.axs.reshape(self.nrows, self.ncols)
 
     def _pop_legend_ax(self) -> matplotlib.axes.Axes:
         gs = self.axs[0, -1].get_gridspec()
@@ -95,8 +92,6 @@ class AxParser:
         return AxMap(**axmap)
 
     def get_axmap(self) -> AxMap:
-        if self._axs_is_nparray:
-            self._reshape_axs()
 
         if self.legend_out:
             self._pop_legend_ax()
