@@ -15,3 +15,13 @@ figsize:
   wide: 
     x: ${style.figsize.wide.x}
     y: ${style.figsize.wide.y}
+
+
+font:
+  name: ${style.font.name}
+  size:
+    s: ${style.font.size.s}
+    m: ${style.font.size.m}
+    l: ${style.font.size.l}
+
+annotation_threshold: .05
