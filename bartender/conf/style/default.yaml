@@ -1,9 +1,9 @@
 font:
-  name: Abadi Extra Light
+  name: DejaVu Sans
   size:
-    l: 26
-    m: 20
-    s: 16
+    l: 14
+    m: 12
+    s: 10
 
 figsize:
   regular:

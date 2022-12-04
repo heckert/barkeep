@@ -11,3 +11,18 @@ test_df = pd.DataFrame({
                            ordered=True,
                            categories=['small', 'medium', 'large'])
 })
+
+
+
+columns = pd.CategoricalIndex(['small', 'medium', 'large'],
+                                ordered=True,
+                                categories=['small', 'medium', 'large'])
+
+test_agg = pd.DataFrame([
+    (0.0, 2 / 3, 1 / 3),
+    (1 / 3, 1 / 3, 1 / 3),
+    (2 / 3, 0.0, 1 / 3),
+], index=list('cba'), columns=columns)
+
+test_agg.index.name = 'group'
+test_agg.columns.name = 'bins'
