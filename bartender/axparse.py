@@ -17,7 +17,7 @@ class AxMap(MappableDataClass):
     group_avg: matplotlib.axes.Axes = None
 
 
-class AxParser:
+class _AxParserBase:
 
     def __init__(self,
                  gridconf: GridConfig):
@@ -31,33 +31,14 @@ class AxParser:
             gridconf (GridConfig): Contains kwargs expected by `plt.subplots`.
         """
 
-        self.legend_out = gridconf.legend_out
-        subplots_specs = gridconf.subplots_specs
-
-        self.nrows = subplots_specs.nrows
-        self.ncols = subplots_specs.ncols
-        self.fig, self.axs = plt.subplots(**subplots_specs)
+        self.nrows = gridconf.nrows
+        self.ncols = gridconf.ncols
+        self.fig, self.axs = plt.subplots(**gridconf)
 
         if isinstance(self.axs, np.ndarray):
             self.axs = self.axs.reshape(self.nrows, self.ncols)
 
-    def _pop_legend_ax(self) -> matplotlib.axes.Axes:
-        gs = self.axs[0, -1].get_gridspec()
-
-        self.legend_ax = self.fig.add_subplot(gs[0:, -1])
-        self.legend_ax.axis("off")
-
-        # Remove legend ax.
-        for ax in self.axs[:, -1]:
-            ax.remove()
-        self.axs = self.axs[:, :-1]
-
-        # We reserve the AxesSubplot on the right side
-        # for the legend, so we treat from now on as
-        # if there were one colun less.
-        self.ncols -= 1
-
-    def _extract_axmap(self) -> AxMap:
+    def get_axmap(self) -> AxMap:
         """Parse AxesSubplots from return-object of `plt.subplots`.
 
         Depending on number of rows and columns, plt.subplots returns
@@ -91,14 +72,30 @@ class AxParser:
 
         return AxMap(**axmap)
 
-    def get_axmap(self) -> AxMap:
-
-        if self.legend_out:
-            self._pop_legend_ax()
-        else:
-            self.legend_ax = None
-
-        return self._extract_axmap()
-
     def get_figure(self) -> matplotlib.figure.Figure:
         return self.fig
+
+
+class LegendOutAxparser(_AxParserBase):
+    def __init__(self, gridconf: GridConfig):
+        super().__init__(gridconf)
+        self._pop_legend_ax()
+
+    def _pop_legend_ax(self) -> matplotlib.axes.Axes:
+        gs = self.axs[0, -1].get_gridspec()
+
+        self.legend_ax = self.fig.add_subplot(gs[0:, -1])
+        self.legend_ax.axis("off")
+
+        # Remove legend ax.
+        for ax in self.axs[:, -1]:
+            ax.remove()
+        self.axs = self.axs[:, :-1]
+
+        # We reserve the AxesSubplot on the right side
+        # for the legend, so we treat from now on as
+        # if there were one colun less.
+        self.ncols -= 1
+
+    def get_legend_ax(self) -> matplotlib.axes.Axes:
+        return self.legend_ax

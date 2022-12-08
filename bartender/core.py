@@ -1,25 +1,36 @@
+import matplotlib
 import matplotlib.pyplot as plt
+from typing import Protocol
 
 from bartender import test_df
-from bartender.axparse import AxParser
+from bartender.axparse import LegendOutAxparser, AxMap
 from bartender.aggregate import Aggregator
-from bartender.grid import (GridConfig,
-                            GridConfigFactory,
+from bartender.grid import (GridConfigFactory,
                             get_grid_recipe)
+
+
+class AxParser(Protocol):
+    def get_axmap() -> AxMap:
+        ...
+
+    def get_figure() -> matplotlib.figure.Figure:
+        ...
+
+    def get_legend_ax() -> matplotlib.axes.Axes:
+        ...
 
 
 class GridPlot:
 
     def __init__(self,
                  aggregator: Aggregator,
-                 gridconf: GridConfig):
+                 parser: AxParser):
 
         self.aggregator = aggregator
 
-        axparser = AxParser(gridconf)
-
-        self.axmap = axparser.get_axmap()
-        self.fig = axparser.get_figure()
+        self.axmap = parser.get_axmap()
+        self.fig = parser.get_figure()
+        self.legend_ax = parser.get_legend_ax()
 
     def show(self):
         for key, ax in self.axmap.items():
@@ -30,7 +41,7 @@ class GridPlot:
         plt.show()
 
 
-def main(legend_out=True):
+def main():
 
     agg = Aggregator(
         test_df,
@@ -41,11 +52,13 @@ def main(legend_out=True):
         overall=True
     )
 
-    recipe = get_grid_recipe(agg, legend_out=legend_out)
+    recipe = get_grid_recipe(agg)
     factory = GridConfigFactory()
     gridconf = factory.build(recipe)
 
-    gp = GridPlot(agg, gridconf)
+    parser = LegendOutAxparser(gridconf)
+
+    gp = GridPlot(agg, parser)
     gp.show()
 
 

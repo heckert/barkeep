@@ -22,7 +22,7 @@ class GridRecipe(MappableDataClass):
 
 
 def get_grid_recipe(aggregator: Aggregator,
-                    legend_out: bool = False) -> GridRecipe:
+                    legend_out: bool = True) -> GridRecipe:
     """Translates shape of Aggregator into a GridRecipe.
 
     Args:
@@ -43,7 +43,7 @@ def get_grid_recipe(aggregator: Aggregator,
 
 
 @dataclass
-class SubplotsSpecs(MappableDataClass):
+class GridConfig(MappableDataClass):
     """Contains all numeric specifications for the grid.
 
     The attributes serve as kwargs for `plt.subplots`.
@@ -52,17 +52,6 @@ class SubplotsSpecs(MappableDataClass):
     nrows: int
     ncols: int
     gridspec_kw: Dict[str, List[int]]
-
-
-@dataclass
-class GridConfig(MappableDataClass):
-    """Wrapper for subplots specs & legend out parameter.
-
-    Gridplot expects this object as argument.
-    """
-
-    subplots_specs: SubplotsSpecs
-    legend_out: bool
 
 
 class GridConfigFactory:
@@ -114,19 +103,12 @@ class GridConfigFactory:
             width_ratios=self.width_ratios
         )
 
-    @property
-    def subplots_specs(self) -> SubplotsSpecs:
-        return SubplotsSpecs(
-            figsize=self.figsize,
-            nrows=self.nrows,
-            ncols=self.ncols,
-            gridspec_kw=self.gridspec_kw
-        )
-
     def build(self, recipe: GridRecipe) -> GridConfig:
         self._parse_recipe(recipe)
 
         return GridConfig(
-            subplots_specs=self.subplots_specs,
-            legend_out=recipe.legend_out
+            figsize=self.figsize,
+            nrows=self.nrows,
+            ncols=self.ncols,
+            gridspec_kw=self.gridspec_kw,
         )
