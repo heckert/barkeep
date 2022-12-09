@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-hydra.initialize(config_path="../conf", version_base=None)
+# hydra.initialize(config_path="../conf", version_base=None)
 cfg = hydra.compose(config_name="config")
 
 
@@ -28,8 +28,8 @@ def annotate_bars(
                 fontsize=cfg.font.size.s)
 
 
-def plot_stack(df: pd.DataFrame,
-               ax: matplotlib.axes.Axes = None) -> None:
+def plot(df: pd.DataFrame,
+         ax: matplotlib.axes.Axes = None) -> None:
 
     df.plot(kind='barh', stacked=True, ax=ax)
 
@@ -47,6 +47,6 @@ if __name__ == '__main__':
 
     from bartender import test_agg
 
-    plot_stack(test_agg)
+    plot(test_agg)
 
     plt.show()

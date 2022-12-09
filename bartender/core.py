@@ -7,6 +7,7 @@ from bartender.axparse import LegendOutAxparser, AxMap
 from bartender.aggregate import Aggregator
 from bartender.grid import (GridConfigFactory,
                             get_grid_recipe)
+from bartender.components import percent, average, legend
 
 
 class AxParser(Protocol):
@@ -32,11 +33,31 @@ class GridPlot:
         self.fig = parser.get_figure()
         self.legend_ax = parser.get_legend_ax()
 
+        if aggregator.group_avg is not None:
+            self.greatest_avg = round(aggregator.group_avg.iloc[:, 0].max(), 1)
+
     def show(self):
+
         for key, ax in self.axmap.items():
             if ax is not None:
                 data = self.aggregator.__getattribute__(key)
-                data.plot(kind='barh', stacked=True, ax=ax)
+                if 'pct' in key:
+                    percent.plot(data, ax=ax)
+                    # Extract legend handles & labels from group_pct
+                    if 'group' in key:
+                        handles, labels = ax.get_legend_handles_labels()
+
+                if 'avg' in key:
+                    x_lim = round(self.greatest_avg * 1.3, 1)
+                    average.plot(data,
+                                 ax=ax,
+                                 n_rows=self.aggregator.n_groups,
+                                 x_lim=x_lim)
+
+                # Remove default legend
+                ax.get_legend().remove()
+
+        legend.plot(handles=handles, labels=labels, ax=self.legend_ax)
 
         plt.show()
 
@@ -48,7 +69,7 @@ def main():
         groupby='group',
         count='bins',
         average='metric',
-        average_type='median',
+        # average_type='median',
         overall=True
     )
 

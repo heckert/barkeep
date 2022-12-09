@@ -13,10 +13,9 @@ test_df = pd.DataFrame({
 })
 
 
-
 columns = pd.CategoricalIndex(['small', 'medium', 'large'],
-                                ordered=True,
-                                categories=['small', 'medium', 'large'])
+                              ordered=True,
+                              categories=['small', 'medium', 'large'])
 
 test_agg = pd.DataFrame([
     (0.0, 2 / 3, 1 / 3),

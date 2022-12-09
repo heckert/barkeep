@@ -20,7 +20,7 @@ class AxMap(MappableDataClass):
 class _AxParserBase:
 
     def __init__(self,
-                 gridconf: GridConfig):
+                 gridconf: GridConfig) -> None:
 
         """Generates the AxesSubplot objects and parses them into an Axmap.
 
