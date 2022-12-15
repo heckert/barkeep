@@ -13,4 +13,6 @@ figsize:
     x: 12
     y: 6
 
+average:
+  color: '#C1C2C7'
   

@@ -1,37 +1,26 @@
 import matplotlib
 import matplotlib.pyplot as plt
-from typing import Protocol
 
 from bartender import test_df
 from bartender.axparse import LegendOutAxparser, AxMap
 from bartender.aggregate import Aggregator
-from bartender.grid import (GridConfigFactory,
-                            get_grid_recipe)
+from bartender.grid import GridConfigFactory, get_grid_recipe
 from bartender.components import percent, average, legend
-
-
-class AxParser(Protocol):
-    def get_axmap() -> AxMap:
-        ...
-
-    def get_figure() -> matplotlib.figure.Figure:
-        ...
-
-    def get_legend_ax() -> matplotlib.axes.Axes:
-        ...
 
 
 class GridPlot:
 
-    def __init__(self,
+    def __init__(self, *,
                  aggregator: Aggregator,
-                 parser: AxParser):
+                 axmap: AxMap,
+                 figure: matplotlib.figure.Figure,
+                 legend_ax: matplotlib.axes.Axes):
 
         self.aggregator = aggregator
 
-        self.axmap = parser.get_axmap()
-        self.fig = parser.get_figure()
-        self.legend_ax = parser.get_legend_ax()
+        self.axmap = axmap
+        self.fig = figure
+        self.legend_ax = legend_ax
 
         if aggregator.group_avg is not None:
             self.greatest_avg = round(aggregator.group_avg.iloc[:, 0].max(), 1)
@@ -48,11 +37,14 @@ class GridPlot:
                         handles, labels = ax.get_legend_handles_labels()
 
                 if 'avg' in key:
-                    x_lim = round(self.greatest_avg * 1.3, 1)
+                    x_lim = round(self.greatest_avg * 1.35, 1)
                     average.plot(data,
                                  ax=ax,
-                                 n_rows=self.aggregator.n_groups,
                                  x_lim=x_lim)
+
+                if 'overall' in key:
+                    # ax.get_xaxis().set_ticks([])
+                    pass
 
                 # Remove default legend
                 ax.get_legend().remove()
@@ -79,7 +71,10 @@ def main():
 
     parser = LegendOutAxparser(gridconf)
 
-    gp = GridPlot(agg, parser)
+    gp = GridPlot(aggregator=agg,
+                  axmap=parser.get_axmap(),
+                  figure=parser.get_figure(),
+                  legend_ax=parser.get_legend_ax())
     gp.show()
 
 

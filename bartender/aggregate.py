@@ -63,11 +63,16 @@ class Aggregator:
 
     @property
     def group_pct(self) -> pd.DataFrame:
-        return self.grouper[self.count] \
+
+        result = self.grouper[self.count] \
             .value_counts(normalize=True) \
             .unstack() \
             .fillna(0) \
             .sort_index(ascending=self.index_ascending)
+
+        result.index.name = None
+
+        return result
 
     @property
     def group_avg(self) -> pd.DataFrame:

@@ -1,5 +1,6 @@
 import hydra
 import matplotlib
+import matplotlib.ticker as ticker
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -39,6 +40,8 @@ def plot(df: pd.DataFrame,
         ax = plt.gca()
 
     annotate_bars(ax)
+
+    ax.xaxis.set_major_formatter(ticker.PercentFormatter(xmax=1))
 
     ax.set_xlim(0, 1)
 
