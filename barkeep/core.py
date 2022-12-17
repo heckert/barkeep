@@ -52,6 +52,7 @@ class GridPlot:
 
         legend.plot(handles=handles, labels=labels, ax=self.legend_ax)
 
+        plt.tight_layout(pad=2)
         plt.show()
 
 
