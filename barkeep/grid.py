@@ -4,12 +4,12 @@ from dataclasses import dataclass
 from omegaconf import DictConfig
 from typing import List, Tuple, Dict
 
-from bartender.aggregate import Aggregator
-from bartender.utils import MappableDataClass
+from barkeep.aggregate import Aggregator
+from barkeep.utils import MappableDataClass
 
 
-hydra.initialize(config_path="conf", version_base=None)
-cfg = hydra.compose(config_name="config")
+with hydra.initialize(config_path="conf", version_base=None):
+    cfg = hydra.compose(config_name="config")
 
 
 @dataclass

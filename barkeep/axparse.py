@@ -4,8 +4,8 @@ import numpy as np
 
 from dataclasses import dataclass
 
-from bartender.grid import GridConfig
-from bartender.utils import MappableDataClass
+from barkeep.grid import GridConfig
+from barkeep.utils import MappableDataClass
 
 
 @dataclass

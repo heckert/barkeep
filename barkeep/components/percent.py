@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-# hydra.initialize(config_path="../conf", version_base=None)
-cfg = hydra.compose(config_name="config")
+with hydra.initialize(config_path="../conf", version_base=None):
+    cfg = hydra.compose(config_name="config")
 
 
 def annotate_bars(
@@ -32,7 +32,7 @@ def annotate_bars(
 def plot(df: pd.DataFrame,
          ax: matplotlib.axes.Axes = None) -> None:
 
-    df.plot(kind='barh', stacked=True, ax=ax)
+    df.plot(kind='barh', stacked=True, ax=ax, cmap='Pastel2')
 
     # If no ax is passed as parameter,
     # get Axes object manually.
@@ -48,7 +48,7 @@ def plot(df: pd.DataFrame,
 
 if __name__ == '__main__':
 
-    from bartender import test_agg
+    from barkeep import test_agg
 
     plot(test_agg)
 

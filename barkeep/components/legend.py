@@ -2,7 +2,8 @@ import hydra
 import matplotlib
 
 
-cfg = hydra.compose(config_name="config")
+with hydra.initialize(config_path="../conf", version_base=None):
+    cfg = hydra.compose(config_name="config")
 
 
 def plot(handles: list,

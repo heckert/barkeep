@@ -1,6 +1,5 @@
 import pandas as pd
 
-__version__ = '0.1.0'
 
 test_df = pd.DataFrame({
     'group': [

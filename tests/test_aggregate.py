@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from bartender.aggregate import Aggregator
+from barkeep.aggregate import Aggregator
 
 
 @pytest.fixture

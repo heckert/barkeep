@@ -1,4 +1,4 @@
-from bartender.utils import (normalize_rgb,
+from barkeep.utils import (normalize_rgb,
                              get_longest_item,
                              get_cmap_colors)
 

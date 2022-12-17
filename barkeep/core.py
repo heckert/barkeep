@@ -1,11 +1,12 @@
 import matplotlib
 import matplotlib.pyplot as plt
+import pandas as pd
 
-from bartender import test_df
-from bartender.axparse import LegendOutAxparser, AxMap
-from bartender.aggregate import Aggregator
-from bartender.grid import GridConfigFactory, get_grid_recipe
-from bartender.components import percent, average, legend
+from barkeep.axparse import LegendOutAxparser, AxMap
+from barkeep.aggregate import Aggregator
+from barkeep.grid import GridConfigFactory, get_grid_recipe
+from barkeep.components import percent, average, legend
+from barkeep.datasets import test_df
 
 
 class GridPlot:
@@ -54,15 +55,20 @@ class GridPlot:
         plt.show()
 
 
-def main():
+def plot(df: pd.DataFrame, *,
+         groupby: str,
+         count: str,
+         average: str = None,
+         average_type: str = 'mean',
+         overall: bool = True):
 
     agg = Aggregator(
-        test_df,
-        groupby='group',
-        count='bins',
-        average='metric',
-        # average_type='median',
-        overall=True
+        df,
+        groupby=groupby,
+        count=count,
+        average=average,
+        average_type=average_type,
+        overall=overall
     )
 
     recipe = get_grid_recipe(agg)
@@ -76,6 +82,16 @@ def main():
                   figure=parser.get_figure(),
                   legend_ax=parser.get_legend_ax())
     gp.show()
+
+
+def main():
+
+    plot(test_df,
+         groupby='group',
+         count='bins',
+         average='metric',
+         # average_type='median',
+         overall=True)
 
 
 if __name__ == '__main__':

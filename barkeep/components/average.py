@@ -3,8 +3,8 @@ import matplotlib
 import pandas as pd
 
 
-# hydra.initialize(config_path="../conf", version_base=None)
-cfg = hydra.compose(config_name="config")
+with hydra.initialize(config_path="../conf", version_base=None):
+    cfg = hydra.compose(config_name="config")
 
 
 def plot(df: pd.DataFrame,
