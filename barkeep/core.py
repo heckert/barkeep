@@ -59,12 +59,21 @@ class GridPlot:
                 # Remove default legend
                 ax.get_legend().remove()
 
+        self._label_axes()
+
         legend.plot(handles=handles, labels=labels, ax=self.legend_ax)
 
         plt.tight_layout(pad=2)
         if save_path is not None:
             plt.savefig(save_path)
         plt.show()
+
+    def _label_axes(self):
+        # self.axmap['group_pct'].set_xlabel('% of group', fontstyle='italic')
+
+        avg_ax = self.axmap.get('group_avg')
+        if avg_ax is not None:
+            avg_ax.set_xlabel(self.aggregator.average_type, fontstyle='italic')
 
 
 def plot(df: pd.DataFrame, *,
@@ -114,7 +123,7 @@ def main():
          groupby='group',
          count='bins',
          average='metric',
-         # average_type='median',
+         average_type='median',
          overall=True,
          save_path=save_path)
 
