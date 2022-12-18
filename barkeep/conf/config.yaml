@@ -16,7 +16,6 @@ figsize:
     x: ${style.figsize.wide.x}
     y: ${style.figsize.wide.y}
 
-
 font:
   name: ${style.font.name}
   size:

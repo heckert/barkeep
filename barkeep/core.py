@@ -6,6 +6,7 @@ import pathlib
 from barkeep.axparse import LegendOutAxparser, AxMap
 from barkeep.aggregate import Aggregator
 from barkeep.grid import GridConfigFactory, get_grid_recipe
+from barkeep.colors import get_colors
 from barkeep.components import percent, average, legend
 from barkeep.datasets import test_df
 
@@ -23,9 +24,16 @@ class GridPlot:
         self.axmap = axmap
         self.fig = figure
         self.legend_ax = legend_ax
+        self.colors = None
 
         if aggregator.group_avg is not None:
             self.greatest_avg = round(aggregator.group_avg.iloc[:, 0].max(), 1)
+
+    def set_colors_by_cmap(self, cmap: str) -> None:
+        self.colors = get_colors(
+            n_colors=self.aggregator.n_count_categories,
+            cmap=cmap
+        )
 
     def show(self, save_path: str | pathlib.Path = None):
 
@@ -33,7 +41,7 @@ class GridPlot:
             if ax is not None:
                 data = self.aggregator.__getattribute__(key)
                 if 'pct' in key:
-                    percent.plot(data, ax=ax)
+                    percent.plot(data, ax=ax, color=self.colors)
                     # Extract legend handles & labels from group_pct
                     if 'group' in key:
                         handles, labels = ax.get_legend_handles_labels()
@@ -65,7 +73,9 @@ def plot(df: pd.DataFrame, *,
          average: str = None,
          average_type: str = 'mean',
          overall: bool = True,
-         save_path: str | pathlib.Path = None):
+         save_path: str | pathlib.Path = None,
+         cmap: str = 'Pastel1',
+         colors: list = None):
 
     agg = Aggregator(
         df,
@@ -73,7 +83,7 @@ def plot(df: pd.DataFrame, *,
         count=count,
         average=average,
         average_type=average_type,
-        overall=overall
+        overall=overall,
     )
 
     recipe = get_grid_recipe(agg)
@@ -86,6 +96,11 @@ def plot(df: pd.DataFrame, *,
                   axmap=parser.get_axmap(),
                   figure=parser.get_figure(),
                   legend_ax=parser.get_legend_ax())
+
+    if cmap is not None:
+        gp.set_colors_by_cmap(cmap)
+    if colors is not None:
+        gp.colors = colors
 
     gp.show(save_path)
 

@@ -30,9 +30,10 @@ def annotate_bars(
 
 
 def plot(df: pd.DataFrame,
-         ax: matplotlib.axes.Axes = None) -> None:
+         ax: matplotlib.axes.Axes = None,
+         **kwargs) -> None:
 
-    df.plot(kind='barh', stacked=True, ax=ax, cmap='Pastel2')
+    df.plot(kind='barh', stacked=True, ax=ax, **kwargs)
 
     # If no ax is passed as parameter,
     # get Axes object manually.
