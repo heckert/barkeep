@@ -1,6 +1,7 @@
 import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
+import pathlib
 
 from barkeep.axparse import LegendOutAxparser, AxMap
 from barkeep.aggregate import Aggregator
@@ -26,7 +27,7 @@ class GridPlot:
         if aggregator.group_avg is not None:
             self.greatest_avg = round(aggregator.group_avg.iloc[:, 0].max(), 1)
 
-    def show(self):
+    def show(self, save_path: str | pathlib.Path = None):
 
         for key, ax in self.axmap.items():
             if ax is not None:
@@ -53,6 +54,8 @@ class GridPlot:
         legend.plot(handles=handles, labels=labels, ax=self.legend_ax)
 
         plt.tight_layout(pad=2)
+        if save_path is not None:
+            plt.savefig(save_path)
         plt.show()
 
 
@@ -61,7 +64,8 @@ def plot(df: pd.DataFrame, *,
          count: str,
          average: str = None,
          average_type: str = 'mean',
-         overall: bool = True):
+         overall: bool = True,
+         save_path: str | pathlib.Path = None):
 
     agg = Aggregator(
         df,
@@ -82,17 +86,22 @@ def plot(df: pd.DataFrame, *,
                   axmap=parser.get_axmap(),
                   figure=parser.get_figure(),
                   legend_ax=parser.get_legend_ax())
-    gp.show()
+
+    gp.show(save_path)
 
 
 def main():
+
+    path = pathlib.Path(__file__)
+    save_path = path.parents[1] / 'images' / 'output.png'
 
     plot(test_df,
          groupby='group',
          count='bins',
          average='metric',
          # average_type='median',
-         overall=True)
+         overall=True,
+         save_path=save_path)
 
 
 if __name__ == '__main__':
