@@ -13,5 +13,8 @@ environment:
 	@conda env create -n $(PROJECT_NAME) -f environment.yml
 	@$(CONDA_ACTIVATE) $(PROJECT_NAME); conda develop .
 
+lint:
+	@$(CONDA_ACTIVATE) $(PROJECT_NAME); flake8
+
 test:
 	@$(CONDA_ACTIVATE) $(PROJECT_NAME); coverage run -m pytest; coverage report -m
