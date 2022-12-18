@@ -3,12 +3,12 @@ channels:
   - conda
 dependencies:
   - python=3.10
-  - matplotlib
-  - pandas
-  - omegaconf
-  - numpy
-  - flake8
-  - pytest
-  - coverage
-  - ipykernel  # for running jupyter in vscode
-  
+  - matplotlib=3.6.2
+  - pandas=1.5.1
+  - numpy=1.23.4
+  - hydra-core=1.2.0
+  - flake8=5.0.4
+  - pytest=7.2.0
+  - coverage=6.3.2
+  #- ipykernel  # for running jupyter in vscode
+  - conda-build=3.23.3
