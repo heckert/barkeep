@@ -11,4 +11,4 @@ dependencies:
   - pytest=7.2.0
   - coverage=6.3.2
   #- ipykernel  # for running jupyter in vscode
-  #- conda-build
+  - conda-build=3.23.3
