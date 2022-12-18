@@ -8,7 +8,7 @@ with pathlib.Path("./requirements.txt").open() as f:
     ]
 
 setup(
-    name='bartender',
+    name='barkeep',
     version='0.1.0',
     license='MIT',
     description='Annotated barplots in a nice grid',
