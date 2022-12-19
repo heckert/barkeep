@@ -51,23 +51,6 @@ def get_cmap_colors(length: Optional[int] = None,
     return result
 
 
-N_COLORS_IN_CMAP = {
-    'Pastel1': 9,
-    'Pastel2': 8
-}
-
-
-def get_colors(n_colors: int,
-               cmap: str = 'Pastel1'):
-    """Convenience-wrapper for get_cmap_colors."""
-
-    colors = get_cmap_colors(n_colors,
-                             n_colors_in_cmap=N_COLORS_IN_CMAP[cmap],
-                             name=cmap)
-
-    return colors
-
-
 def normalize_rgb(rgb: Tuple[int, int, int],
                   alpha: float = None) -> Tuple[float]:
     """Normalize 255-based RGB scores to values between 0 and 1.
