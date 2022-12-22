@@ -1,13 +1,23 @@
 import pandas as pd
+from typing import Union, Iterable
 
+
+# TODO:
+# * implement ordering for counts and groups
 
 class Aggregator:
     """Provides all aggregates for the plot"""
 
-    _allowed_avg_types = {
+    VALID_AVG_TYPES= {
         'mean',
         'median'
     }
+
+    VALID_ORDER_COUNT_BY= {
+        'value',
+        'index'
+    }
+
 
     def __init__(self,
                  df: pd.DataFrame, *,
@@ -16,25 +26,29 @@ class Aggregator:
                  average: str = None,
                  average_type: str = 'mean',
                  overall: bool = True,
-                 index_ascending: bool = False):
+                 index_ascending: bool = False,
+                 order_count_by: Union[str, Iterable],
+                 order_count_asc: bool=False):
 
         self.df = df
         self.grouper = df.groupby(groupby)
         self.count = count
         self.average = average
 
-        if average_type not in self._allowed_avg_types:
+        if average_type not in self.VALID_AVG_TYPES:
             raise ValueError(
-                'average_type must be either '
-                f'({", ".join(self._allowed_avg_types)})'
+                'average_type not in '
+                f'{", ".join(self.VALID_AVG_TYPES)}'
             )
 
         self.average_type = average_type
         self.overall = overall
         self.index_ascending = index_ascending
+        self.ordering = df[self.count].value_counts(normalize=True).index
 
     @property
     def overall_pct(self) -> pd.DataFrame:
+
         if not self.overall:
             return
 
