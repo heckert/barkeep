@@ -8,16 +8,15 @@ from typing import Union, Iterable
 class Aggregator:
     """Provides all aggregates for the plot"""
 
-    VALID_AVG_TYPES= {
+    VALID_AVG_TYPES = {
         'mean',
         'median'
     }
 
-    VALID_ORDER_COUNT_BY= {
+    VALID_ORDER_COUNT_BY = {
         'value',
         'index'
     }
-
 
     def __init__(self,
                  df: pd.DataFrame, *,
@@ -27,8 +26,8 @@ class Aggregator:
                  average_type: str = 'mean',
                  overall: bool = True,
                  index_ascending: bool = False,
-                 order_count_by: Union[str, Iterable],
-                 order_count_asc: bool=False):
+                 order_count_by: Union[str, Iterable] = 'value',
+                 order_count_asc: bool = False):
 
         self.df = df
         self.grouper = df.groupby(groupby)
