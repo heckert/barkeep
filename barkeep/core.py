@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pathlib
 
-from typing import Optional
+from typing import Optional, Union
 
 from barkeep.axparse import LegendOutAxparser, AxMap
 from barkeep.aggregate import Aggregator
@@ -32,7 +32,7 @@ class GridPlot:
             self.greatest_avg = round(aggregator.group_avg.iloc[:, 0].max(), 1)
 
     def show(self,
-             save_path: str | pathlib.Path = None,
+             save_path: Union[str, pathlib.Path] = None,
              **kwargs):
 
         for key, ax in self.axmap.items():
@@ -80,7 +80,7 @@ def plot(df: pd.DataFrame, *,
          average: str = None,
          average_type: str = 'mean',
          overall: bool = True,
-         save_path: str | pathlib.Path = None,
+         save_path: Union[str, pathlib.Path] = None,
          cmap: str = 'Pastel2',
          n_colors_in_cmap: Optional[int] = 8,
          colors: list = None):
