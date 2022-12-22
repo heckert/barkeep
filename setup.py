@@ -14,8 +14,8 @@ setup(
     description='Annotated barplots in a nice grid',
     author='Heinz Eckert',
     author_email='heinzeckert6@gmail.com',
-    packages=find_namespace_packages(),
+    packages=find_namespace_packages(include=['barkeep', 'barkeep.*']),
     include_package_data=True,
-    python_requires='>=3.10',
+    python_requires='>=3.8',
     install_requires=install_requires
 )
