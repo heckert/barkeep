@@ -83,7 +83,10 @@ def plot(df: pd.DataFrame, *,
          save_path: Union[str, pathlib.Path] = None,
          cmap: str = 'Pastel1',
          n_colors_in_cmap: Optional[int] = 9,
-         colors: list = None):
+         colors: list = None,
+         index_ascending: bool = False,
+         order_pct_by: str = 'index',
+         order_pct_ascending: bool = True):
 
     agg = Aggregator(
         df,
@@ -92,6 +95,9 @@ def plot(df: pd.DataFrame, *,
         average=average,
         average_type=average_type,
         overall=overall,
+        index_ascending=index_ascending,
+        order_pct_by=order_pct_by,
+        order_pct_ascending=order_pct_ascending
     )
 
     recipe = get_grid_recipe(agg)
