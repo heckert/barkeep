@@ -81,8 +81,8 @@ def plot(df: pd.DataFrame, *,
          average_type: str = 'mean',
          overall: bool = True,
          save_path: Union[str, pathlib.Path] = None,
-         cmap: str = 'Pastel2',
-         n_colors_in_cmap: Optional[int] = 8,
+         cmap: str = 'Pastel1',
+         n_colors_in_cmap: Optional[int] = 9,
          colors: list = None):
 
     agg = Aggregator(

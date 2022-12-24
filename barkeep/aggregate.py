@@ -6,16 +6,16 @@ from typing import Union, Iterable
 # * implement ordering for counts and groups
 
 class Aggregator:
-    """Provides all aggregates for the plot"""
+    """Provides all aggregates for the plot."""
 
     VALID_AVG_TYPES = {
         'mean',
         'median'
     }
 
-    VALID_ORDER_COUNT_BY = {
-        'value',
-        'index'
+    VALID_ORDER_PCT_BYS = {
+        'index',
+        'values'
     }
 
     def __init__(self,
@@ -26,24 +26,46 @@ class Aggregator:
                  average_type: str = 'mean',
                  overall: bool = True,
                  index_ascending: bool = False,
-                 order_count_by: Union[str, Iterable] = 'value',
-                 order_count_asc: bool = False):
+                 order_pct_by: str = 'index',
+                 order_pct_ascending: bool = True):
 
         self.df = df
         self.grouper = df.groupby(groupby)
         self.count = count
         self.average = average
-
-        if average_type not in self.VALID_AVG_TYPES:
-            raise ValueError(
-                'average_type not in '
-                f'{", ".join(self.VALID_AVG_TYPES)}'
-            )
-
         self.average_type = average_type
         self.overall = overall
         self.index_ascending = index_ascending
-        self.ordering = df[self.count].value_counts(normalize=True).index
+        self.ordered_columns = self._set_pct_ordering(
+            by=order_pct_by,
+            ascending=order_pct_ascending)
+
+        for input_, valids in {
+            average_type: self.VALID_AVG_TYPES,
+            order_pct_by: self.VALID_ORDER_PCT_BYS
+        }.items():
+            self._check_inputs(input_, valids)
+
+    @staticmethod
+    def _check_inputs(input_, valids: set) -> None:
+        if input_ not in valids:
+            raise ValueError(
+                f'{input_} not in '
+                f'({", ".join(valids)})')
+
+    def _set_pct_ordering(self, by: str, ascending: bool) -> pd.Index:
+
+        overall_value_counts = self.df[self.count].value_counts(normalize=True)
+
+        if by == "index":
+            return overall_value_counts \
+                    .sort_index(ascending=ascending) \
+                    .index
+
+        if by == "values":
+            return overall_value_counts \
+                    .sort_values(ascending=ascending) \
+                    .index
 
     @property
     def overall_pct(self) -> pd.DataFrame:
@@ -54,6 +76,8 @@ class Aggregator:
         result = pd.DataFrame(
             self.df[self.count].value_counts(normalize=True)
         ).transpose()
+
+        result = result[self.ordered_columns]
 
         result.index = ['Overall']
 
@@ -82,6 +106,8 @@ class Aggregator:
             .unstack() \
             .fillna(0) \
             .sort_index(ascending=self.index_ascending)
+
+        result = result[self.ordered_columns]
 
         result.index.name = None
 
