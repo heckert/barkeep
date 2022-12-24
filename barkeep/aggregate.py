@@ -1,9 +1,5 @@
 import pandas as pd
-from typing import Union, Iterable
 
-
-# TODO:
-# * implement ordering for counts and groups
 
 class Aggregator:
     """Provides all aggregates for the plot."""
