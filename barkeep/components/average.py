@@ -17,4 +17,4 @@ def plot(df: pd.DataFrame,
     ax.set_ylabel('')
 
     for bars in ax.containers:
-        ax.bar_label(bars, padding=5)
+        ax.bar_label(bars, padding=5, fmt='%.1f')

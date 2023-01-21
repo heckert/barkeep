@@ -45,7 +45,7 @@ class GridPlot:
                         handles, labels = ax.get_legend_handles_labels()
 
                 if 'avg' in key:
-                    x_lim = round(self.greatest_avg * 1.35, 1)
+                    x_lim = round(self.greatest_avg * 1.5, 1)
                     average.plot(data,
                                  ax=ax,
                                  x_lim=x_lim)
@@ -81,8 +81,8 @@ def plot(df: pd.DataFrame, *,
          average_type: str = 'mean',
          overall: bool = True,
          save_path: Union[str, pathlib.Path] = None,
-         cmap: str = 'Pastel1',
-         n_colors_in_cmap: Optional[int] = 9,
+         cmap: str = 'Pastel2',
+         n_colors_in_cmap: Optional[int] = 8,
          colors: list = None,
          index_ascending: bool = False,
          order_pct_by: str = 'index',

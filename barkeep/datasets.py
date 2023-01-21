@@ -8,7 +8,7 @@ test_df = pd.DataFrame({
         'ordinary dinosaurs', 'hot dogs', 'hot dogs',
         'mighty ducks', 'ordinary dinosaurs', 'mighty ducks'
     ],
-    'metric': range(9)
+    'metric': [0, 1.23456789, 2, 3, 4, 5, 6, 7, 8]
 })
 
 test_df['bins'] = pd.cut(test_df['metric'],
