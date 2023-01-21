@@ -45,7 +45,7 @@ class GridPlot:
                         handles, labels = ax.get_legend_handles_labels()
 
                 if 'avg' in key:
-                    x_lim = round(self.greatest_avg * 1.35, 1)
+                    x_lim = round(self.greatest_avg * 1.5, 1)
                     average.plot(data,
                                  ax=ax,
                                  x_lim=x_lim)
