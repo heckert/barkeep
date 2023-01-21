@@ -1,7 +1,4 @@
-import math
-
 from collections.abc import Mapping
-from typing import Union
 
 
 def get_longest_item(array: list) -> str:
@@ -26,6 +23,3 @@ class MappableDataClass(Mapping):
 
     def __len__(self):
         return len(self.__dict__)
-
-def get_magnitude(n: Union[float, int]) -> int:
-    return math.floor(math.log10(n))
