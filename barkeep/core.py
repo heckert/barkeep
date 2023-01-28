@@ -1,3 +1,4 @@
+import hydra
 import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -8,9 +9,13 @@ from typing import Optional, Union
 from barkeep.axparse import LegendOutAxparser, AxMap
 from barkeep.aggregate import Aggregator
 from barkeep.grid import GridConfigFactory, get_grid_recipe
-from barkeep.colors import get_cmap_colors
+from barkeep.utils import select_from_center
 from barkeep.components import percent, average, legend
 from barkeep.datasets import test_df
+
+
+with hydra.initialize(config_path="./conf", version_base=None):
+    cfg = hydra.compose(config_name="config", overrides=['style=ice'])
 
 
 class GridPlot:
@@ -81,9 +86,7 @@ def plot(df: pd.DataFrame, *,
          average_type: str = 'mean',
          overall: bool = True,
          save_path: Union[str, pathlib.Path] = None,
-         cmap: str = 'Pastel2',
-         n_colors_in_cmap: Optional[int] = 8,
-         colors: list = None,
+         colors: list = cfg.colors.palette,
          index_ascending: bool = False,
          order_pct_by: str = 'index',
          order_pct_ascending: bool = True):
@@ -111,17 +114,12 @@ def plot(df: pd.DataFrame, *,
                   figure=parser.get_figure(),
                   legend_ax=parser.get_legend_ax())
 
-    if colors is not None:
-        gp.show(save_path, color=colors)
+    # Get colors
+    color_indices = select_from_center(agg.n_count_categories,
+                                       len(colors))
+    selected_colors = [colors[i] for i in color_indices]
 
-    elif n_colors_in_cmap is not None:
-        colors = get_cmap_colors(length=gp.aggregator.n_count_categories,
-                                 n_colors_in_cmap=n_colors_in_cmap,
-                                 name=cmap)
-        gp.show(save_path, color=colors)
-
-    else:
-        gp.show(save_path, cmap=cmap)
+    gp.show(save_path, color=selected_colors)
 
 
 def main():

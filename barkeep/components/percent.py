@@ -45,12 +45,3 @@ def plot(df: pd.DataFrame,
     ax.xaxis.set_major_formatter(ticker.PercentFormatter(xmax=1))
 
     ax.set_xlim(0, 1)
-
-
-if __name__ == '__main__':
-
-    from barkeep import test_agg
-
-    plot(test_agg)
-
-    plt.show()

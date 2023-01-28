@@ -11,7 +11,7 @@ def plot(df: pd.DataFrame,
          ax: matplotlib.axes.Axes,
          x_lim: float) -> None:
 
-    df.plot.barh(ax=ax, color=cfg.style.average.color)
+    df.plot.barh(ax=ax, color=cfg.style.colors.grey)
     ax.set_xlim(0, x_lim)
     ax.set_yticks([])
     ax.set_ylabel('')

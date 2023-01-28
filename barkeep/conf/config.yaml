@@ -23,4 +23,6 @@ font:
     m: ${style.font.size.m}
     l: ${style.font.size.l}
 
+colors: ${style.colors}
+
 annotation_threshold: .05

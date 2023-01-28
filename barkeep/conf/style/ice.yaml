@@ -15,11 +15,12 @@ figsize:
 
 colors:
   palette:
-    - '#264D59'
-    - '#43978D'
-    - '#C8CC81'
-    - '#F9E07F'
-    - '#F9AD6A'
-    - '#D46C4E'
+    - '#C6A477'
+    - '#ECD59F'
+    - '#E1DCBE'
+    - '#D3E7EE'
+    - '#ABD1DC'
+    - '#7097A8'
+
   
   grey: '#C1C2C7'
