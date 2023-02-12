@@ -20,13 +20,7 @@ with hydra.initialize(config_path="./conf", version_base=None):
 
 class GridPlot:
     """
-    A class for creating horizontally stacked, annotated barplot.
-
-    This class provides a convenient way to visualize a normalized value count
-    of a Pandas dataframe grouped by a column and stacked horizontally. The
-    value count can be performed on a grouped metric variable, and the
-    aggregate value such as mean or median can be visualized on a second axis.
-    The plot also includes a legend.
+    A class for creating a horizontally stacked, annotated barplot.
 
     Attributes:
         aggregator (Aggregator): An instance of the `Aggregator` class
