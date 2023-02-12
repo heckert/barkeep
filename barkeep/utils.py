@@ -103,7 +103,7 @@ def normalize_rgb(rgb: Tuple[int, int, int],
 
 
 def select_from_center(n: int, length: int) -> list:
-    """Given an array of ``length``, pick `n` elements from its center.
+    """Given an array of `length`, pick `n` elements from its center.
 
     Args:
         n (int): Number of items to select.

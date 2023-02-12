@@ -20,4 +20,3 @@ test_df['bins'] = pd.cut(test_df['metric'],
                             'medium',
                             'large',
                             'xlarge'])
-

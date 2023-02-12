@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pathlib
 
-from typing import Optional, Union
+from typing import Union
 
 from barkeep.axparse import LegendOutAxparser, AxMap
 from barkeep.aggregate import Aggregator
@@ -19,12 +19,45 @@ with hydra.initialize(config_path="./conf", version_base=None):
 
 
 class GridPlot:
+    """
+    A class for creating horizontally stacked, annotated barplot.
+
+    This class provides a convenient way to visualize a normalized value count
+    of a Pandas dataframe grouped by a column and stacked horizontally. The
+    value count can be performed on a grouped metric variable, and the
+    aggregate value such as mean or median can be visualized on a second axis.
+    The plot also includes a legend.
+
+    Attributes:
+        aggregator (Aggregator): An instance of the `Aggregator` class
+            representing the data to be plotted.
+        axmap (AxMap): A dictionary of matplotlib axes objects used for
+            plotting.
+        fig (matplotlib.figure.Figure): The figure object that holds the
+            grid plot.
+        legend_ax (matplotlib.axes.Axes): The axis object for the legend.
+        greatest_avg (float): The greatest value of the aggregate value
+            (mean or median) or setting the x limit of the plot.
+    """
 
     def __init__(self, *,
                  aggregator: Aggregator,
                  axmap: AxMap,
                  figure: matplotlib.figure.Figure,
                  legend_ax: matplotlib.axes.Axes):
+
+        """
+        Initialize a new `GridPlot` instance.
+
+        Args:
+            aggregator (Aggregator): An instance of the `Aggregator` class
+                representing the data to be plotted.
+            axmap (AxMap): A dictionary-like object of matplotlib axes
+                objects used for plotting.
+            figure (matplotlib.figure.Figure): The figure object that holds
+                the grid plot.
+            legend_ax (matplotlib.axes.Axes): The axis object for the legend.
+        """
 
         self.aggregator = aggregator
 
@@ -39,6 +72,17 @@ class GridPlot:
     def show(self,
              save_path: Union[str, pathlib.Path] = None,
              **kwargs):
+
+        """
+        Show the grid plot.
+
+        Args:
+            save_path (Union[str, pathlib.Path], optional): The path to
+                save the plot as an image. If not specified, the plot
+                will be displayed but not saved.
+            **kwargs: Additional arguments to pass to the plotting functions.
+
+        """
 
         for key, ax in self.axmap.items():
             if ax is not None:
@@ -90,6 +134,31 @@ def plot(df: pd.DataFrame, *,
          index_ascending: bool = False,
          order_pct_by: str = 'index',
          order_pct_ascending: bool = True):
+
+    """
+    Plot a grid plot based on the input data.
+
+    Args:
+        df (pd.DataFrame): DataFrame to use for plotting.
+        groupby (str): Column name to group the data by.
+        count (str): Column name to count the data by.
+        average (str, optional): Column name to average the data by.
+            If None, no averaging is performed. Defaults to None.
+        average_type (str, optional): Type of average to calculate.
+            Can be 'mean' or 'median'. Defaults to 'mean'.
+        overall (bool, optional): If True, include an overall plot.
+            Defaults to True.
+        save_path (Union[str, pathlib.Path], optional): Path to save the plot.
+            If None, the plot is not saved. Defaults to None.
+        colors (list, optional): List of colors to use for the plot. Defaults
+            to the colors specified in the `cfg.colors.palette` configuration.
+        index_ascending (bool, optional): If True, sort index in ascending
+            order. Defaults to False.
+        order_pct_by (str, optional): Order percentages by index or values.
+            Defaults to 'index'.
+        order_pct_ascending (bool, optional): If True, sort the percentage in
+            ascending order. Defaults to True.
+    """
 
     agg = Aggregator(
         df,
